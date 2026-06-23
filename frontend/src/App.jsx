@@ -3,10 +3,11 @@ import './App.css'
 
 function App() {
   return (
-    <>
-      <h1>Clima</h1>
-      <p>Notre application météo existe 🌤️</p>
-    </>
+    <div className="min-h-screen bg-blue-500 flex items-center justify-center">
+      <h1 className="text-5xl font-bold text-white">
+        Clima ☁️
+      </h1>
+    </div>
   )
 }
 
