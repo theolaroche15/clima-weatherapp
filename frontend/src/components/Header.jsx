@@ -2,7 +2,7 @@ function Header() {
     const userLocation = 'Roanne, France'
 
     return (
-        <header className="flex items-center justify-between rounded-3xl bg-white px-4 py-3 shadow-sm">
+        <header className="flex items-center justify-between rounded-4xl bg-white px-4 py-3 shadow-sm">
             <h1 className="shrink-0 text-xl font-bold tracking-tight">
                 Clima
             </h1>
