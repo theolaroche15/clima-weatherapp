@@ -1,6 +1,6 @@
 function SearchBar() {
     return (
-        <section className="rounded-[32px] bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
                 <h2 className="text-xl font-bold">
                     Rechercher une ville

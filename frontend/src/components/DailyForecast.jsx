@@ -2,7 +2,7 @@ import { dailyForecast } from '../data/weatherData'
 
 function DailyForecast() {
     return (
-        <section className="rounded-[32px] bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
                 <h2 className="text-xl font-bold">Prévisions des prochains jours</h2>
 
@@ -17,7 +17,7 @@ function DailyForecast() {
                         key={forecast.day}
                         className="flex items-center justify-between rounded-2xl bg-slate-100 px-4 py-3"
                     >
-                        <div className="min-w-[95px]">
+                        <div className="min-w-23.75">
                             <p className="font-bold">{forecast.day}</p>
                             <p className="text-sm text-slate-500">
                                 {forecast.condition}

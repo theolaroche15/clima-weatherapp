@@ -2,7 +2,7 @@ import { hourlyForecast } from '../data/weatherData'
 
 function HourlyForecast() {
     return (
-        <section className="rounded-[32px] bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
                 <h2 className="text-xl font-bold">Prévisions horaires</h2>
             </div>
@@ -11,7 +11,7 @@ function HourlyForecast() {
                 {hourlyForecast.map((forecast) => (
                     <article
                         key={forecast.hour}
-                        className="min-w-[88px] rounded-2xl bg-slate-100 p-4 text-center"
+                        className="min-w-22 rounded-2xl bg-slate-100 p-4 text-center"
                     >
                         <p className="text-sm font-semibold text-slate-500">
                             {forecast.hour}
