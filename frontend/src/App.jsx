@@ -1,34 +1,21 @@
-// import { useState } from 'react'
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
 
-import Header from './components/Header'
-import CurrentWeather from './components/CurrentWeather'
-import SearchBar from './components/SearchBar'
-import HourlyForecast from './components/HourlyForecast'
-import DailyForecast from './components/DailyForecast'
-import WeatherStats from './components/WeatherStats'
-import FavoriteCities from './components/FavoriteCities'
+import Home from './pages/Home'
+import Search from './pages/Search'
+import Favorites from './pages/Favorites'
+import Settings from './pages/Settings'
+import Login from './pages/Login'
 
 function App() {
   return (
     <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5">
-
-        <Header />
-
-        <CurrentWeather />
-
-        <SearchBar />
-
-        <HourlyForecast />
-
-        <DailyForecast />
-
-        <WeatherStats />
-
-        <FavoriteCities />
-
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/favorites" element={<Favorites />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
     </main>
   )
 }
