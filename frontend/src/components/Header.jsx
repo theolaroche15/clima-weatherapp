@@ -1,46 +1,61 @@
+import { Link } from 'react-router-dom'
+
 function Header() {
-    const userLocation = 'Roanne, France'
+    const isAuthenticated = false
 
     return (
-        <header className="flex items-center justify-between rounded-4xl bg-white px-4 py-3 shadow-sm">
-            <h1 className="shrink-0 text-xl font-bold tracking-tight">
-                Clima
-            </h1>
-
-            <button
-                type="button"
-                className="hidden items-center gap-2 rounded-2xl bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200 md:flex"
-                aria-label="Afficher la météo de ma position actuelle"
+        <header className="flex items-center justify-between rounded-3xl bg-white px-4 py-3 shadow-sm">
+            <Link
+                to="/"
+                className="text-xl font-bold tracking-tight"
             >
-                <span className="text-xs">⌖</span>
-                <span>{userLocation}</span>
-            </button>
+                Clima
+            </Link>
 
-            <div className="flex items-center gap-2">
-                <form className="hidden md:block">
-                    <input
-                        type="text"
-                        placeholder="Rechercher une ville..."
-                        className="w-56 rounded-2xl bg-slate-100 px-4 py-2 text-sm outline-none placeholder:text-slate-400 focus:bg-slate-200"
-                    />
-                </form>
-
-                <button
-                    type="button"
-                    className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200 md:hidden"
+            <nav
+                className="flex items-center gap-2"
+                aria-label="Navigation principale"
+            >
+                <Link
+                    to="/search"
+                    className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
                     aria-label="Rechercher une ville"
+                    title="Rechercher"
                 >
                     🔍
-                </button>
+                </Link>
 
-                <button
-                    type="button"
-                    className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
-                    aria-label="Ouvrir le menu utilisateur"
-                >
-                    👤
-                </button>
-            </div>
+                {isAuthenticated ? (
+                    <>
+                        <Link
+                            to="/favorites"
+                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                            aria-label="Afficher mes favoris"
+                            title="Favoris"
+                        >
+                            ⭐
+                        </Link>
+
+                        <Link
+                            to="/settings"
+                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                            aria-label="Ouvrir les réglages"
+                            title="Réglages"
+                        >
+                            ⚙️
+                        </Link>
+                    </>
+                ) : (
+                    <Link
+                        to="/login"
+                        className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                        aria-label="Se connecter"
+                        title="Connexion"
+                    >
+                        👤
+                    </Link>
+                )}
+            </nav>
         </header>
     )
 }
