@@ -1,34 +1,60 @@
-import { dailyForecast } from '../data/weatherData'
+function DailyForecast({ daily = [] }) {
+    const formatDay = (date) => {
+        if (!date) {
+            return ''
+        }
 
-function DailyForecast() {
+        return new Intl.DateTimeFormat('fr-FR', {
+            weekday: 'long',
+        }).format(new Date(`${date}T12:00:00`))
+    }
+
     return (
         <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
-                <h2 className="text-xl font-bold">Prévisions des prochains jours</h2>
-
-                <p className="mt-2 text-sm text-slate-500">
-                    Une vue simple des jours à venir.
-                </p>
+                <h2 className="text-xl font-bold">
+                    Prévisions des prochains jours
+                </h2>
             </div>
 
             <div className="space-y-3">
-                {dailyForecast.map((forecast) => (
+                {daily.map((forecast) => (
                     <article
-                        key={forecast.day}
+                        key={forecast.date}
                         className="flex items-center justify-between rounded-2xl bg-slate-100 px-4 py-3"
                     >
                         <div className="min-w-23.75">
-                            <p className="font-bold">{forecast.day}</p>
+                            <p className="font-bold capitalize">
+                                {formatDay(forecast.date)}
+                            </p>
+
                             <p className="text-sm text-slate-500">
-                                {forecast.condition}
+                                {forecast.condition.text}
                             </p>
                         </div>
 
-                        <p className="text-3xl">{forecast.icon}</p>
+                        <img
+                            src={forecast.condition.icon}
+                            alt={forecast.condition.text}
+                            className="h-12 w-12 object-contain"
+                        />
 
                         <div className="flex gap-4 text-sm font-medium text-slate-500">
-                            <span>↑ {forecast.max}°</span>
-                            <span>↓ {forecast.min}°</span>
+                            <span>
+                                ↑{' '}
+                                {Math.round(
+                                    forecast.maximumTemperatureCelsius
+                                )}
+                                °
+                            </span>
+
+                            <span>
+                                ↓{' '}
+                                {Math.round(
+                                    forecast.minimumTemperatureCelsius
+                                )}
+                                °
+                            </span>
                         </div>
                     </article>
                 ))}

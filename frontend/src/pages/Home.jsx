@@ -41,24 +41,32 @@ function Home() {
             Chargement...
           </p>
         )}
+
         {error && (
           <p className="text-center text-sm text-red-600">
             {error}
           </p>
         )}
+
         {weather && (
-          <CurrentWeather weather={weather} />
+          <>
+            <CurrentWeather weather={weather} />
+
+            <SearchBar />
+
+            <HourlyForecast
+              hourly={weather.forecast.hourly}
+              localTime={weather.location.localTime} />
+
+            <DailyForecast daily={weather.forecast.daily} />
+
+            <WeatherStats
+              current={weather.current}
+              today={weather.forecast.today} />
+
+            <FavoriteCities />
+          </>
         )}
-
-        <SearchBar />
-
-        <HourlyForecast />
-
-        <DailyForecast />
-
-        <WeatherStats />
-
-        <FavoriteCities />
 
       </div>
     </main>

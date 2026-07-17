@@ -1,26 +1,44 @@
-import { hourlyForecast } from '../data/weatherData'
+function HourlyForecast({ hourly = [], localTime = '' }) {
+    const formatHour = (dateTime) => {
+        if (!dateTime) {
+            return ''
+        }
 
-function HourlyForecast() {
+        return dateTime.split(' ')[1]
+    }
+
+    const currentLocalHour = localTime
+        ? `${localTime.slice(0, 13)}:00`
+        : ''
+
+    const upcomingHours = hourly
+        .filter((forecast) => forecast.time >= currentLocalHour)
+        .slice(0, 24)
+
     return (
         <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
                 <h2 className="text-xl font-bold">Prévisions horaires</h2>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-2 md:grid md:grid-cols-5 md:overflow-visible md:pb-0">
-                {hourlyForecast.map((forecast) => (
+            <div className="flex gap-3 overflow-x-auto pb-2">
+                {upcomingHours.map((forecast) => (
                     <article
-                        key={forecast.hour}
-                        className="min-w-22 rounded-2xl bg-slate-100 p-4 text-center"
+                        key={forecast.time}
+                        className="min-w-22 shrink-0 rounded-2xl bg-slate-100 p-4 text-center"
                     >
                         <p className="text-sm font-semibold text-slate-500">
-                            {forecast.hour}
+                            {formatHour(forecast.time)}
                         </p>
 
-                        <p className="my-3 text-3xl">{forecast.icon}</p>
+                        <img
+                            src={forecast.condition.icon}
+                            alt={forecast.condition.text}
+                            className="mx-auto my-3 h-12 w-12 object-contain"
+                        />
 
                         <p className="text-lg font-bold">
-                            {forecast.temperature}°
+                            {Math.round(forecast.temperatureCelsius)}°
                         </p>
                     </article>
                 ))}

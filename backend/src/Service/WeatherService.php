@@ -40,48 +40,50 @@ final class WeatherService
 
         $hourlyForecast = [];
 
-        foreach ($today['hour'] as $hour) {
-            $hourlyForecast[] = [
-                'time' => $hour['time'],
+        foreach ($data['forecast']['forecastday'] as $forecastDay) {
+            foreach ($forecastDay['hour'] as $hour) {
+                $hourlyForecast[] = [
+                    'time' => $hour['time'],
 
-                'temperatureCelsius' => $hour['temp_c'],
-                'temperatureFahrenheit' => $hour['temp_f'],
+                    'temperatureCelsius' => $hour['temp_c'],
+                    'temperatureFahrenheit' => $hour['temp_f'],
 
-                'isDay' => $hour['is_day'] === 1,
+                    'isDay' => $hour['is_day'] === 1,
 
-                'condition' => [
-                    'text' => $hour['condition']['text'],
-                    'icon' => $this->formatIconUrl($hour['condition']['icon']),
-                    'code' => $hour['condition']['code'],
-                ],
+                    'condition' => [
+                        'text' => $hour['condition']['text'],
+                        'icon' => $this->formatIconUrl(
+                            $hour['condition']['icon']
+                        ),
+                        'code' => $hour['condition']['code'],
+                    ],
 
-                'windSpeedKph' => $hour['wind_kph'],
-                'windDegree' => $hour['wind_degree'],
-                'windDirection' => $hour['wind_dir'],
+                    'windSpeedKph' => $hour['wind_kph'],
+                    'windDegree' => $hour['wind_degree'],
+                    'windDirection' => $hour['wind_dir'],
 
-                'pressureMb' => $hour['pressure_mb'],
+                    'pressureMb' => $hour['pressure_mb'],
 
-                'precipitationMm' => $hour['precip_mm'],
-                'snowCm' => $hour['snow_cm'],
+                    'precipitationMm' => $hour['precip_mm'],
+                    'snowCm' => $hour['snow_cm'],
 
-                'humidity' => $hour['humidity'],
-                'cloud' => $hour['cloud'],
+                    'humidity' => $hour['humidity'],
+                    'cloud' => $hour['cloud'],
 
-                'feelsLikeCelsius' => $hour['feelslike_c'],
-                'feelsLikeFahrenheit' => $hour['feelslike_f'],
+                    'feelsLikeCelsius' => $hour['feelslike_c'],
+                    'feelsLikeFahrenheit' => $hour['feelslike_f'],
 
-                'willRain' => $hour['will_it_rain'] === 1,
-                'rainChance' => $hour['chance_of_rain'],
+                    'willRain' => $hour['will_it_rain'] === 1,
+                    'rainChance' => $hour['chance_of_rain'],
 
-                'willSnow' => $hour['will_it_snow'] === 1,
-                'snowChance' => $hour['chance_of_snow'],
+                    'willSnow' => $hour['will_it_snow'] === 1,
+                    'snowChance' => $hour['chance_of_snow'],
 
-                'visibilityKm' => $hour['vis_km'],
-
-                'gustKph' => $hour['gust_kph'],
-
-                'uvIndex' => $hour['uv'],
-            ];
+                    'visibilityKm' => $hour['vis_km'],
+                    'gustKph' => $hour['gust_kph'],
+                    'uvIndex' => $hour['uv'],
+                ];
+            }
         }
 
         $dailyForecast = [];
