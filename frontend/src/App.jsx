@@ -8,7 +8,7 @@ import Login from './pages/Login'
 
 function App() {
   return (
-    <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
+    <main>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
