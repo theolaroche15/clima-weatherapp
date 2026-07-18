@@ -1,6 +1,12 @@
 import { currentWeather } from '../data/weatherData'
 
-function CurrentWeather({ weather }) {
+import {
+    convertTemperature,
+    getTemperatureUnit,
+} from '../utils/temperature'
+
+function CurrentWeather({ weather, temperatureUnit }) {
+    const unit = getTemperatureUnit(temperatureUnit)
 
     const formatLocalDateTime = (localTime) => {
         if (!localTime) {
@@ -37,11 +43,20 @@ function CurrentWeather({ weather }) {
 
                     <div className="mt-8 md:mt-12">
                         <p className="text-7xl font-black leading-none tracking-tight md:text-8xl">
-                            {weather.current.temperatureCelsius}°
+                            {convertTemperature(
+                                weather.current.temperatureCelsius,
+                                temperatureUnit
+                            )}
+                            {unit}
                         </p>
 
                         <p className="mt-3 hidden text-sm text-slate-500 md:block">
-                            Ressenti {weather.current.feelsLikeCelsius}°
+                            Ressenti{' '}
+                            {convertTemperature(
+                                weather.current.feelsLikeCelsius,
+                                temperatureUnit
+                            )}
+                            {unit}
                         </p>
                     </div>
                 </div>
@@ -67,8 +82,25 @@ function CurrentWeather({ weather }) {
                         </div>
 
                         <div className="mt-3 flex justify-center gap-5 text-sm font-medium text-slate-500 md:justify-end">
-                            <span>↑ {weather.forecast.today.maximumTemperatureCelsius}°</span>
-                            <span>↓ {weather.forecast.today.minimumTemperatureCelsius}°</span>
+                            <span>
+                                ↑{' '}
+                                {convertTemperature(
+                                    weather.forecast.today
+                                        .maximumTemperatureCelsius,
+                                    temperatureUnit
+                                )}
+                                {unit}
+                            </span>
+
+                            <span>
+                                ↓{' '}
+                                {convertTemperature(
+                                    weather.forecast.today
+                                        .minimumTemperatureCelsius,
+                                    temperatureUnit
+                                )}
+                                {unit}
+                            </span>
                         </div>
                     </div>
                 </div>

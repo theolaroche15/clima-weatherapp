@@ -1,4 +1,15 @@
-function HourlyForecast({ hourly = [], localTime = '' }) {
+import {
+    convertTemperature,
+    getTemperatureUnit,
+} from '../utils/temperature'
+
+function HourlyForecast({
+    hourly = [],
+    localTime = '',
+    temperatureUnit,
+}) {
+    const unit = getTemperatureUnit(temperatureUnit)
+
     const formatHour = (dateTime) => {
         if (!dateTime) {
             return ''
@@ -38,7 +49,11 @@ function HourlyForecast({ hourly = [], localTime = '' }) {
                         />
 
                         <p className="text-lg font-bold">
-                            {Math.round(forecast.temperatureCelsius)}°
+                            {convertTemperature(
+                                forecast.temperatureCelsius,
+                                temperatureUnit
+                            )}
+                            {unit}
                         </p>
                     </article>
                 ))}

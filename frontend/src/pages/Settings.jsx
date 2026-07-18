@@ -1,14 +1,70 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Header from '../components/Header'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 function Settings() {
-    const [temperatureUnit, setTemperatureUnit] = useState('celsius')
-    const [theme, setTheme] = useState('light')
-    const [isLocationEnabled, setIsLocationEnabled] = useState(true)
-    const [areNotificationsEnabled, setAreNotificationsEnabled] =
+    const { user, logout, updateSettings } = useAuth()
+
+    const [temperatureUnit, setTemperatureUnit] = useState(
+        user?.temperatureUnit || 'celsius'
+    )
+    const [isUpdatingTemperature, setIsUpdatingTemperature] =
         useState(false)
+
+    const [isLocationEnabled, setIsLocationEnabled] = useState(true)
+    const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (user?.temperatureUnit) {
+            setTemperatureUnit(user.temperatureUnit)
+        }
+    }, [user])
+
+    async function handleLogout() {
+        setIsLoggingOut(true)
+
+        try {
+            await logout()
+            navigate('/')
+        } catch (error) {
+            console.error('Erreur pendant la déconnexion :', error)
+        } finally {
+            setIsLoggingOut(false)
+        }
+    }
+
+    async function handleTemperatureUnitChange(newUnit) {
+        if (
+            newUnit === temperatureUnit ||
+            isUpdatingTemperature
+        ) {
+            return
+        }
+
+        const previousUnit = temperatureUnit
+
+        setTemperatureUnit(newUnit)
+        setIsUpdatingTemperature(true)
+
+        try {
+            await updateSettings({
+                temperatureUnit: newUnit,
+            })
+        } catch (error) {
+            setTemperatureUnit(previousUnit)
+
+            console.error(
+                "Erreur lors de la mise à jour de l'unité :",
+                error
+            )
+        } finally {
+            setIsUpdatingTemperature(false)
+        }
+    }
 
     return (
         <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
@@ -38,17 +94,16 @@ function Settings() {
                                 <h2 className="font-semibold">
                                     Unité de température
                                 </h2>
-
-                                <p className="mt-1 text-sm text-slate-500">
-                                    Choisis l’unité utilisée dans l’application.
-                                </p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-3">
                                 <button
                                     type="button"
-                                    onClick={() => setTemperatureUnit('celsius')}
-                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${temperatureUnit === 'celsius'
+                                    onClick={() =>
+                                        handleTemperatureUnitChange('celsius')
+                                    }
+                                    disabled={isUpdatingTemperature}
+                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${temperatureUnit === 'celsius'
                                         ? 'bg-slate-900 text-white'
                                         : 'bg-white text-slate-600 hover:bg-slate-200'
                                         }`}
@@ -58,49 +113,16 @@ function Settings() {
 
                                 <button
                                     type="button"
-                                    onClick={() => setTemperatureUnit('fahrenheit')}
-                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${temperatureUnit === 'fahrenheit'
+                                    onClick={() =>
+                                        handleTemperatureUnitChange('fahrenheit')
+                                    }
+                                    disabled={isUpdatingTemperature}
+                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${temperatureUnit === 'fahrenheit'
                                         ? 'bg-slate-900 text-white'
                                         : 'bg-white text-slate-600 hover:bg-slate-200'
                                         }`}
                                 >
                                     Fahrenheit °F
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="rounded-2xl bg-slate-100 p-4">
-                            <div className="mb-3">
-                                <h2 className="font-semibold">
-                                    Thème
-                                </h2>
-
-                                <p className="mt-1 text-sm text-slate-500">
-                                    Choisis l’apparence générale de Clima.
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <button
-                                    type="button"
-                                    onClick={() => setTheme('light')}
-                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${theme === 'light'
-                                        ? 'bg-slate-900 text-white'
-                                        : 'bg-white text-slate-600 hover:bg-slate-200'
-                                        }`}
-                                >
-                                    Clair
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setTheme('dark')}
-                                    className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${theme === 'dark'
-                                        ? 'bg-slate-900 text-white'
-                                        : 'bg-white text-slate-600 hover:bg-slate-200'
-                                        }`}
-                                >
-                                    Sombre
                                 </button>
                             </div>
                         </div>
@@ -119,47 +141,36 @@ function Settings() {
                             <button
                                 type="button"
                                 onClick={() =>
-                                    setIsLocationEnabled((previousValue) => !previousValue)
+                                    setIsLocationEnabled(
+                                        (previousValue) => !previousValue
+                                    )
                                 }
-                                className={`relative h-7 w-12 shrink-0 rounded-full transition ${isLocationEnabled ? 'bg-slate-900' : 'bg-slate-300'
+                                className={`relative h-7 w-12 shrink-0 rounded-full transition ${isLocationEnabled
+                                    ? 'bg-slate-900'
+                                    : 'bg-slate-300'
                                     }`}
                                 aria-pressed={isLocationEnabled}
                                 aria-label="Activer ou désactiver la géolocalisation"
                             >
                                 <span
-                                    className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${isLocationEnabled ? 'left-6' : 'left-1'
+                                    className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${isLocationEnabled
+                                        ? 'left-6'
+                                        : 'left-1'
                                         }`}
                                 />
                             </button>
                         </div>
 
-                        <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-100 p-4">
-                            <div>
-                                <h2 className="font-semibold">
-                                    Notifications météo
-                                </h2>
-
-                                <p className="mt-1 text-sm text-slate-500">
-                                    Recevoir les alertes importantes.
-                                </p>
-                            </div>
-
+                        <div className="rounded-2xl bg-slate-100 p-4">
                             <button
                                 type="button"
-                                onClick={() =>
-                                    setAreNotificationsEnabled(
-                                        (previousValue) => !previousValue
-                                    )
-                                }
-                                className={`relative h-7 w-12 shrink-0 rounded-full transition ${areNotificationsEnabled ? 'bg-slate-900' : 'bg-slate-300'
-                                    }`}
-                                aria-pressed={areNotificationsEnabled}
-                                aria-label="Activer ou désactiver les notifications météo"
+                                onClick={handleLogout}
+                                disabled={isLoggingOut}
+                                className="w-full rounded-2xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
                             >
-                                <span
-                                    className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${areNotificationsEnabled ? 'left-6' : 'left-1'
-                                        }`}
-                                />
+                                {isLoggingOut
+                                    ? 'Déconnexion...'
+                                    : 'Se déconnecter'}
                             </button>
                         </div>
                     </div>

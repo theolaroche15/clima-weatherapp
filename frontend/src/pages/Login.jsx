@@ -1,20 +1,101 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
 import Header from '../components/Header'
 
 function Login() {
     const [isRegisterMode, setIsRegisterMode] = useState(false)
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-    function handleSubmit(event) {
+    const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const { login, register } = useAuth()
+    const navigate = useNavigate()
+
+    async function handleSubmit(event) {
         event.preventDefault()
 
-        if (isRegisterMode) {
-            console.log('Création du compte')
+        setError('')
+        setSuccessMessage('')
+
+        if (isRegisterMode && password !== passwordConfirmation) {
+            setError('Les mots de passe ne correspondent pas.')
             return
         }
 
-        console.log('Connexion')
+        setIsSubmitting(true)
+
+        try {
+            if (isRegisterMode) {
+                await register({
+                    email,
+                    username,
+                    password,
+                })
+
+                setSuccessMessage(
+                    'Ton compte a bien été créé. Tu peux maintenant te connecter.'
+                )
+
+                setIsRegisterMode(false)
+                setUsername('')
+                setPassword('')
+                setPasswordConfirmation('')
+
+                return
+            }
+
+            await login({
+                email,
+                password,
+            })
+
+            navigate('/')
+        } catch (requestError) {
+            const validationErrors = requestError.data?.errors
+
+            if (
+                validationErrors &&
+                typeof validationErrors === 'object'
+            ) {
+                const firstValidationError =
+                    Object.values(validationErrors)[0]
+
+                if (Array.isArray(firstValidationError)) {
+                    setError(firstValidationError[0])
+                } else {
+                    setError(String(firstValidationError))
+                }
+
+                return
+            }
+
+            if (requestError.status === 401) {
+                setError('Email ou mot de passe incorrect.')
+                return
+            }
+
+            if (requestError.status === 422) {
+                setError(
+                    requestError.message ||
+                    'Les informations renseignées sont invalides.'
+                )
+                return
+            }
+
+            setError(
+                requestError.message ||
+                'Une erreur est survenue. Réessaie plus tard.'
+            )
+        } finally {
+            setIsSubmitting(false)
+        }
     }
 
     return (
@@ -39,24 +120,44 @@ function Login() {
                         </h1>
                     </div>
 
+                    {error && (
+                        <p
+                            role="alert"
+                            className="mb-4 rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700"
+                        >
+                            {error}
+                        </p>
+                    )}
+
+                    {successMessage && (
+                        <p
+                            role="status"
+                            className="mb-4 rounded-2xl bg-green-50 px-4 py-3 text-sm text-green-700"
+                        >
+                            {successMessage}
+                        </p>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {isRegisterMode && (
                             <div>
                                 <label
-                                    htmlFor="name"
+                                    htmlFor="username"
                                     className="mb-2 block text-sm font-medium text-slate-700"
                                 >
-                                    Nom
+                                    Nom d'utilisateur
                                 </label>
 
                                 <input
-                                    id="name"
-                                    name="name"
+                                    id="username"
+                                    name="username"
                                     type="text"
-                                    autoComplete="name"
+                                    autoComplete="username"
                                     required
+                                    value={username}
+                                    onChange={(event) => setUsername(event.target.value)}
                                     className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
-                                    placeholder="Ton nom"
+                                    placeholder="Ton nom d’utilisateur"
                                 />
                             </div>
                         )}
@@ -75,6 +176,8 @@ function Login() {
                                 type="email"
                                 autoComplete="email"
                                 required
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
                                 className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
                                 placeholder="exemple@email.com"
                             />
@@ -93,9 +196,13 @@ function Login() {
                                 name="password"
                                 type="password"
                                 autoComplete={
-                                    isRegisterMode ? 'new-password' : 'current-password'
+                                    isRegisterMode
+                                        ? 'new-password'
+                                        : 'current-password'
                                 }
                                 required
+                                value={password}
+                                onChange={(event) => setPassword(event.target.value)}
                                 className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
                                 placeholder="Ton mot de passe"
                             />
@@ -116,6 +223,10 @@ function Login() {
                                     type="password"
                                     autoComplete="new-password"
                                     required
+                                    value={passwordConfirmation}
+                                    onChange={(event) =>
+                                        setPasswordConfirmation(event.target.value)
+                                    }
                                     className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
                                     placeholder="Confirme ton mot de passe"
                                 />
@@ -124,15 +235,26 @@ function Login() {
 
                         <button
                             type="submit"
-                            className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+                            disabled={isSubmitting}
+                            className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                            {isRegisterMode ? 'Créer mon compte' : 'Se connecter'}
+                            {isSubmitting
+                                ? 'Chargement...'
+                                : isRegisterMode
+                                    ? 'Créer mon compte'
+                                    : 'Se connecter'}
                         </button>
                     </form>
 
                     <button
                         type="button"
-                        onClick={() => setIsRegisterMode((previousValue) => !previousValue)}
+                        onClick={() => {
+                            setIsRegisterMode((previousValue) => !previousValue)
+                            setError('')
+                            setSuccessMessage('')
+                            setPassword('')
+                            setPasswordConfirmation('')
+                        }}
                         className="mt-5 w-full text-center text-sm font-medium text-slate-600"
                     >
                         {isRegisterMode

@@ -1,8 +1,22 @@
-function WeatherStats({ current = {}, today = {} }) {
+import {
+    convertTemperature,
+    getTemperatureUnit,
+} from '../utils/temperature'
+
+function WeatherStats({
+    current = {},
+    today = {},
+    temperatureUnit,
+}) {
+    const unit = getTemperatureUnit(temperatureUnit)
+
     const currentDetails = [
         {
             title: 'Ressenti',
-            value: `${Math.round(current.feelsLikeCelsius ?? 0)}°`,
+            value: `${convertTemperature(
+                current.feelsLikeCelsius,
+                temperatureUnit
+            )}${unit}`,
             icon: '🌡️',
         },
         {

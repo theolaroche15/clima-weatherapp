@@ -9,6 +9,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -119,6 +120,57 @@ final class AuthController extends AbstractController
                 'notificationsEnabled' => $user->isNotificationsEnabled(),
             ],
         ]);
+    }
+
+    #[Route('/api/me/settings', name: 'api_me_settings_update', methods: ['PATCH'])]
+    public function updateSettings(
+        #[CurrentUser] ?User $user,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
+        if ($user === null) {
+            return $this->json([
+                'message' => 'Authentication required.',
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!is_array($data)) {
+            return $this->json([
+                'message' => 'Invalid JSON body.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $temperatureUnit = $data['temperatureUnit'] ?? null;
+
+        if ($temperatureUnit === null) {
+            return $this->json([
+                'message' => 'Temperature unit is required.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (!in_array($temperatureUnit, ['celsius', 'fahrenheit'], true)) {
+            return $this->json([
+                'message' => 'Temperature unit must be celsius or fahrenheit.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user->setTemperatureUnit($temperatureUnit);
+
+        $entityManager->flush();
+
+        return $this->json([
+            'message' => 'Settings updated successfully.',
+            'user' => [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles(),
+                'temperatureUnit' => $user->getTemperatureUnit(),
+                'notificationsEnabled' => $user->isNotificationsEnabled(),
+            ],
+        ], Response::HTTP_OK);
     }
 
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]

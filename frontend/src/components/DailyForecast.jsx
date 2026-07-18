@@ -1,4 +1,11 @@
-function DailyForecast({ daily = [] }) {
+import {
+    convertTemperature,
+    getTemperatureUnit,
+} from '../utils/temperature'
+
+function DailyForecast({ daily = [], temperatureUnit }) {
+    const unit = getTemperatureUnit(temperatureUnit)
+
     const formatDay = (date) => {
         if (!date) {
             return ''
@@ -42,18 +49,20 @@ function DailyForecast({ daily = [] }) {
                         <div className="flex gap-4 text-sm font-medium text-slate-500">
                             <span>
                                 ↑{' '}
-                                {Math.round(
-                                    forecast.maximumTemperatureCelsius
+                                {convertTemperature(
+                                    forecast.maximumTemperatureCelsius,
+                                    temperatureUnit
                                 )}
-                                °
+                                {unit}
                             </span>
 
                             <span>
                                 ↓{' '}
-                                {Math.round(
-                                    forecast.minimumTemperatureCelsius
+                                {convertTemperature(
+                                    forecast.minimumTemperatureCelsius,
+                                    temperatureUnit
                                 )}
-                                °
+                                {unit}
                             </span>
                         </div>
                     </article>

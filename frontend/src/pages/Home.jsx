@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import '../App.css'
 
 import { getCurrentWeather } from '../services/weatherApi'
+import { useAuth } from '../contexts/AuthContext'
 
 import Header from '../components/Header'
 import CurrentWeather from '../components/CurrentWeather'
@@ -12,6 +13,7 @@ import WeatherStats from '../components/WeatherStats'
 import FavoriteCities from '../components/FavoriteCities'
 
 function Home() {
+  const { user } = useAuth()
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -50,19 +52,25 @@ function Home() {
 
         {weather && (
           <>
-            <CurrentWeather weather={weather} />
+            <CurrentWeather
+              weather={weather}
+              temperatureUnit={user?.temperatureUnit} />
 
             <SearchBar />
 
             <HourlyForecast
               hourly={weather.forecast.hourly}
-              localTime={weather.location.localTime} />
+              localTime={weather.location.localTime}
+              temperatureUnit={user?.temperatureUnit} />
 
-            <DailyForecast daily={weather.forecast.daily} />
+            <DailyForecast
+              daily={weather.forecast.daily}
+              temperatureUnit={user?.temperatureUnit} />
 
             <WeatherStats
               current={weather.current}
-              today={weather.forecast.today} />
+              today={weather.forecast.today}
+              temperatureUnit={user?.temperatureUnit} />
 
             <FavoriteCities />
           </>
