@@ -12,6 +12,37 @@ use Symfony\Component\Routing\Attribute\Route;
 final class WeatherController extends AbstractController
 {
     #[Route(
+        '/api/weather/search',
+        name: 'api_weather_search',
+        methods: ['GET']
+    )]
+    public function search(
+        Request $request,
+        WeatherService $weatherService
+    ): JsonResponse {
+        $query = trim((string) $request->query->get('query', ''));
+
+        if ($query === '') {
+            return $this->json([
+                'error' => 'The "query" parameter is required.',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        try {
+            $cities = $weatherService->searchCities($query);
+
+            return $this->json([
+                'cities' => $cities,
+            ]);
+        } catch (\Throwable $exception) {
+            return $this->json([
+                'error' => 'Unable to search cities.',
+                'details' => $exception->getMessage(),
+            ], Response::HTTP_BAD_GATEWAY);
+        }
+    }
+
+    #[Route(
         '/api/weather/current',
         name: 'api_weather_current',
         methods: ['GET']

@@ -226,6 +226,36 @@ final class WeatherService
         ];
     }
 
+    public function searchCities(string $query): array
+    {
+        $response = $this->httpClient->request(
+            'GET',
+            $this->baseUrl . '/search.json',
+            [
+                'query' => [
+                    'key' => $this->apiKey,
+                    'q' => $query,
+                ],
+            ]
+        );
+
+        $data = $response->toArray();
+
+        $cities = [];
+
+        foreach ($data as $city) {
+            $cities[] = [
+                'name' => $city['name'],
+                'region' => $city['region'],
+                'country' => $city['country'],
+                'latitude' => $city['lat'],
+                'longitude' => $city['lon'],
+            ];
+        }
+
+        return $cities;
+    }
+
     private function formatIconUrl(string $iconUrl): string
     {
         if (str_starts_with($iconUrl, '//')) {

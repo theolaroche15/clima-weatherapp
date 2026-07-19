@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import '../App.css'
 
 import { getCurrentWeather } from '../services/weatherApi'
@@ -13,13 +14,18 @@ import WeatherStats from '../components/WeatherStats'
 import FavoriteCities from '../components/FavoriteCities'
 
 function Home() {
+  const location = useLocation()
+  const selectedCity = location.state?.city
+  const cityName = selectedCity?.name ?? 'Paris'
   const { user } = useAuth()
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    getCurrentWeather('Roanne')
+    setLoading(true)
+    setError(null)
+    getCurrentWeather(cityName)
       .then((data) => {
         setWeather(data)
       })
@@ -30,7 +36,7 @@ function Home() {
       .finally(() => {
         setLoading(false)
       })
-  }, [])
+  }, [cityName])
 
   return (
     <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
