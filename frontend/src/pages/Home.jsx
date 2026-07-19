@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import '../App.css'
 
 import { getCurrentWeather } from '../services/weatherApi'
+import { getFavorites } from '../services/favoriteApi'
 import { useAuth } from '../contexts/AuthContext'
 
 import Header from '../components/Header'
@@ -18,13 +19,16 @@ function Home() {
   const selectedCity = location.state?.city
   const cityName = selectedCity?.name ?? 'Paris'
   const { user } = useAuth()
+
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [favorites, setFavorites] = useState([])
 
   useEffect(() => {
     setLoading(true)
     setError(null)
+
     getCurrentWeather(cityName)
       .then((data) => {
         setWeather(data)
@@ -38,10 +42,24 @@ function Home() {
       })
   }, [cityName])
 
+  useEffect(() => {
+    if (!user) {
+      setFavorites([])
+      return
+    }
+
+    getFavorites()
+      .then((data) => {
+        setFavorites(data)
+      })
+      .catch((error) => {
+        console.error('Erreur favoris :', error)
+      })
+  }, [user])
+
   return (
     <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5">
-
         <Header />
 
         {loading && (
@@ -60,28 +78,38 @@ function Home() {
           <>
             <CurrentWeather
               weather={weather}
-              temperatureUnit={user?.temperatureUnit} />
+              temperatureUnit={user?.temperatureUnit}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
 
             <SearchBar />
 
             <HourlyForecast
               hourly={weather.forecast.hourly}
               localTime={weather.location.localTime}
-              temperatureUnit={user?.temperatureUnit} />
+              temperatureUnit={user?.temperatureUnit}
+            />
 
             <DailyForecast
               daily={weather.forecast.daily}
-              temperatureUnit={user?.temperatureUnit} />
+              temperatureUnit={user?.temperatureUnit}
+            />
 
             <WeatherStats
               current={weather.current}
               today={weather.forecast.today}
-              temperatureUnit={user?.temperatureUnit} />
+              temperatureUnit={user?.temperatureUnit}
+            />
 
-            <FavoriteCities />
+            {user && (
+              <FavoriteCities
+                favorites={favorites}
+                temperatureUnit={user.temperatureUnit}
+              />
+            )}
           </>
         )}
-
       </div>
     </main>
   )

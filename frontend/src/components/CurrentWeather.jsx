@@ -1,12 +1,49 @@
-import { currentWeather } from '../data/weatherData'
+import { addFavorite, deleteFavorite } from '../services/favoriteApi'
 
 import {
     convertTemperature,
     getTemperatureUnit,
 } from '../utils/temperature'
 
-function CurrentWeather({ weather, temperatureUnit }) {
+function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
     const unit = getTemperatureUnit(temperatureUnit)
+
+    const currentFavorite = favorites.find(
+        (favorite) =>
+            favorite.latitude === weather.location.latitude &&
+            favorite.longitude === weather.location.longitude
+    )
+
+    const isFavorite = Boolean(currentFavorite)
+
+    async function handleFavorite() {
+        try {
+            if (isFavorite) {
+                await deleteFavorite(currentFavorite.id)
+
+                setFavorites((previous) =>
+                    previous.filter((item) => item.id !== currentFavorite.id)
+                )
+
+                return
+            }
+
+            const response = await addFavorite({
+                name: weather.location.name,
+                region: weather.location.region,
+                country: weather.location.country,
+                latitude: weather.location.latitude,
+                longitude: weather.location.longitude,
+            })
+
+            setFavorites((previous) => [
+                ...previous,
+                response.favorite,
+            ])
+        } catch (error) {
+            alert(error.message)
+        }
+    }
 
     const formatLocalDateTime = (localTime) => {
         if (!localTime) {
@@ -32,6 +69,19 @@ function CurrentWeather({ weather, temperatureUnit }) {
             <div className="flex flex-col items-center text-center md:flex-row md:items-stretch md:justify-between md:text-left">
                 <div className="flex flex-col md:justify-between">
                     <div>
+                        <div className="mb-3">
+                            <button
+                                type="button"
+                                onClick={handleFavorite}
+                                className={`cursor-pointer text-2xl transition ${isFavorite
+                                    ? 'text-yellow-500'
+                                    : 'text-slate-400 hover:text-yellow-500'
+                                    }`}
+                            >
+                                {isFavorite ? '⭐' : '☆'}
+                            </button>
+                        </div>
+
                         <h2 className="text-2xl font-bold md:text-3xl">
                             {weather.location.name}, {weather.location.country}
                         </h2>
