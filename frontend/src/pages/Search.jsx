@@ -151,7 +151,7 @@ function Search() {
 
                         <button
                             type="submit"
-                            className="rounded-2xl bg-[#3691eb] px-6 py-4 font-medium text-white transition hover:bg-[#064487]"
+                            className="rounded-xl bg-[#3691eb] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#2b82d8]"
                         >
                             Rechercher
                         </button>
@@ -190,9 +190,10 @@ function Search() {
                                         <button
                                             type="button"
                                             onClick={handleClearHistory}
-                                            className="text-sm text-slate-500 transition hover:text-red-600"
+                                            className="group"
+                                            aria-label="Effacer l'historique"
                                         >
-                                            Effacer
+                                            <i className="fa-solid fa-trash text-[rgb(223,42,42)] transition-colors duration-200 group-hover:text-[rgb(170,28,28)]"></i>
                                         </button>
                                     </div>
 

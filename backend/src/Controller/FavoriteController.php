@@ -66,9 +66,9 @@ final class FavoriteController extends AbstractController
             'user' => $user,
         ]);
 
-        if ($favoritesCount >= 5) {
+        if ($favoritesCount >= 8) {
             return $this->json([
-                'error' => 'You can only have 5 favorites.',
+                'error' => 'You can only have 8 favorites.',
             ], Response::HTTP_CONFLICT);
         }
 
@@ -111,7 +111,7 @@ final class FavoriteController extends AbstractController
 
         $favorites = $favoriteRepository->findBy(
             ['user' => $user],
-            ['createdAt' => 'DESC']
+            ['createdAt' => 'ASC']
         );
 
         $data = [];

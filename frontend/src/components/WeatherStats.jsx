@@ -10,6 +10,25 @@ function WeatherStats({
 }) {
     const unit = getTemperatureUnit(temperatureUnit)
 
+    const formatFrenchTime = (time) => {
+        if (!time) {
+            return '—'
+        }
+
+        const [hourMinute, period] = time.split(' ')
+        let [hours, minutes] = hourMinute.split(':').map(Number)
+
+        if (period === 'PM' && hours !== 12) {
+            hours += 12
+        }
+
+        if (period === 'AM' && hours === 12) {
+            hours = 0
+        }
+
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    }
+
     const currentDetails = [
         {
             title: 'Ressenti',
@@ -17,43 +36,35 @@ function WeatherStats({
                 current.feelsLikeCelsius,
                 temperatureUnit
             )}${unit}`,
-            icon: '🌡️',
         },
         {
             title: 'Humidité',
             value: `${current.humidity ?? 0} %`,
-            icon: '💧',
         },
         {
             title: 'Vent',
             value: `${current.windSpeedKph ?? 0} km/h`,
             description: current.windDirection ?? '—',
-            icon: '💨',
         },
         {
             title: 'Pression',
             value: `${current.pressureMb ?? 0} hPa`,
-            icon: '⏱️',
         },
         {
             title: 'Visibilité',
             value: `${current.visibilityKm ?? 0} km`,
-            icon: '👁️',
         },
         {
             title: 'Précipitations',
             value: `${current.precipitationMm ?? 0} mm`,
-            icon: '🌧️',
         },
         {
             title: 'Indice UV',
             value: current.uvIndex ?? 0,
-            icon: '☀️',
         },
         {
             title: 'Nuages',
             value: `${current.cloudCover ?? 0} %`,
-            icon: '☁️',
         },
     ]
 
@@ -107,7 +118,7 @@ function WeatherStats({
 
                 <div className="flex items-center gap-3">
                     <p className="shrink-0 text-sm font-bold text-slate-900 md:text-base">
-                        {today.astro?.sunrise ?? '—'}
+                        {formatFrenchTime(today.astro?.sunrise)}
                     </p>
 
                     <div className="flex flex-1 items-center gap-2">
@@ -117,14 +128,15 @@ function WeatherStats({
                             aria-hidden="true"
                             className="text-xl md:text-2xl"
                         >
-                            ☀️
+                            <i className="fa-solid fa-sun"
+                                style={{ color: 'rgb(255, 199, 0)' }}></i>
                         </span>
 
                         <div className="h-px flex-1 bg-slate-300" />
                     </div>
 
                     <p className="shrink-0 text-sm font-bold text-slate-900 md:text-base">
-                        {today.astro?.sunset ?? '—'}
+                        {formatFrenchTime(today.astro?.sunset)}
                     </p>
                 </div>
 
@@ -136,47 +148,44 @@ function WeatherStats({
 
             <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,1fr)]">
                 <div className="flex h-full flex-col rounded-3xl bg-slate-100 p-4 md:p-5">
-                    <h3 className="mb-4 font-bold text-slate-900">
+                    <h3 className="mb-4 flex items-center gap-2 font-bold text-slate-900">
+                        <i className="fa-solid fa-earth-africa fa-float"
+                            style={{ color: 'rgb(0, 142, 255)' }}></i>
+
                         Conditions actuelles
                     </h3>
 
-                    <div className="grid flex-1 grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
+                    <div className="grid flex-1 grid-cols-2 gap-x-5">
                         {currentDetails.map((detail) => (
-                            <article
+                            <div
                                 key={detail.title}
-                                className="h-full rounded-2xl bg-white p-4 shadow-sm"
+                                className="flex min-h-14 flex-col justify-center border-b border-slate-200 py-2 md:flex-row md:items-center md:justify-between md:gap-3"
                             >
-                                <div className="flex h-full items-start justify-between gap-2">
-                                    <div className="min-w-0">
-                                        <p className="text-sm text-slate-500">
-                                            {detail.title}
+                                <div>
+                                    <p className="text-sm text-slate-500">
+                                        {detail.title}
+                                    </p>
+
+                                    {detail.description && (
+                                        <p className="mt-1 text-xs text-slate-400">
+                                            {detail.description}
                                         </p>
-
-                                        <p className="mt-2 text-lg font-bold text-slate-900 md:text-xl">
-                                            {detail.value}
-                                        </p>
-
-                                        {detail.description && (
-                                            <p className="mt-1 text-xs text-slate-500">
-                                                {detail.description}
-                                            </p>
-                                        )}
-                                    </div>
-
-                                    <span
-                                        aria-hidden="true"
-                                        className="shrink-0 text-xl"
-                                    >
-                                        {detail.icon}
-                                    </span>
+                                    )}
                                 </div>
-                            </article>
+
+                                <p className="mt-1 shrink-0 text-sm font-bold text-slate-900 md:mt-0">
+                                    {detail.value}
+                                </p>
+                            </div>
                         ))}
                     </div>
                 </div>
 
                 <div className="flex h-full flex-col rounded-3xl bg-slate-100 p-4 md:p-5">
-                    <h3 className="mb-4 font-bold text-slate-900">
+                    <h3 className="mb-4 flex items-center gap-2 font-bold text-slate-900">
+                        <i className="fa-solid fa-meteor fa-float"
+                            style={{ color: 'rgb(235, 119, 57)' }}></i>
+
                         Prévisions du jour
                     </h3>
 

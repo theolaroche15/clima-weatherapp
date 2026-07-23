@@ -1,4 +1,5 @@
 import { addFavorite, deleteFavorite } from '../services/favoriteApi'
+import { useAuth } from '../contexts/AuthContext'
 
 import {
     convertTemperature,
@@ -6,6 +7,7 @@ import {
 } from '../utils/temperature'
 
 function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
+    const { isAuthenticated } = useAuth()
     const unit = getTemperatureUnit(temperatureUnit)
 
     const currentFavorite = favorites.find(
@@ -69,22 +71,33 @@ function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
             <div className="flex flex-col items-center text-center md:flex-row md:items-stretch md:justify-between md:text-left">
                 <div className="flex flex-col md:justify-between">
                     <div>
-                        <div className="mb-3">
-                            <button
-                                type="button"
-                                onClick={handleFavorite}
-                                className={`cursor-pointer text-2xl transition ${isFavorite
-                                    ? 'text-yellow-500'
-                                    : 'text-slate-400 hover:text-yellow-500'
-                                    }`}
-                            >
-                                {isFavorite ? '⭐' : '☆'}
-                            </button>
-                        </div>
+                        <div className="mb-3 flex items-center gap-3">
+                            <h2 className="text-2xl font-bold md:text-3xl">
+                                {weather.location.name}, {weather.location.country}
+                            </h2>
 
-                        <h2 className="text-2xl font-bold md:text-3xl">
-                            {weather.location.name}, {weather.location.country}
-                        </h2>
+                            {isAuthenticated && (
+                                <button
+                                    type="button"
+                                    onClick={handleFavorite}
+                                    className="ml-auto cursor-pointer text-2xl transition"
+                                    aria-label={
+                                        isFavorite
+                                            ? 'Retirer des favoris'
+                                            : 'Ajouter aux favoris'
+                                    }
+                                >
+                                    <i
+                                        className={
+                                            isFavorite
+                                                ? 'fa-solid fa-star'
+                                                : 'fa-regular fa-star'
+                                        }
+                                        style={{ color: 'rgb(255, 212, 59)' }}
+                                    ></i>
+                                </button>
+                            )}
+                        </div>
 
                         <p className="mt-2 text-sm text-slate-500">
                             {formatLocalDateTime(weather.location.localTime)}

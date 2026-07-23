@@ -142,12 +142,14 @@ function Favorites() {
             </div>
 
             <div className="flex shrink-0 items-center gap-2">
-              <Link
-                to="/search"
-                className="rounded-2xl bg-slate-100 px-4 py-2 text-sm font-medium transition hover:bg-slate-200"
-              >
-                Ajouter
-              </Link>
+              {!isEditing && (
+                <Link
+                  to="/search"
+                  className="rounded-2xl bg-slate-100 px-4 py-2 text-sm font-medium transition hover:bg-slate-200"
+                >
+                  Ajouter
+                </Link>
+              )}
 
               {favorites.length > 0 && (
                 <button
@@ -174,40 +176,63 @@ function Favorites() {
           ) : favorites.length > 0 ? (
             <div className="space-y-3">
               {favorites.map((favorite) => {
-                const weather = favoritesWeather[favorite.id]
+                const weather =
+                  favoritesWeather[favorite.id]
 
                 return (
                   <div
                     key={favorite.id}
-                    className="flex items-center justify-between gap-3 rounded-2xl bg-slate-100 px-4 py-3"
+                    className={`flex items-center justify-between gap-3 rounded-2xl bg-slate-100 px-4 py-3 transition ${!isEditing ? 'hover:bg-slate-200' : ''
+                      }`}
                   >
                     <button
                       type="button"
                       onClick={() =>
-                        handleSelectFavorite(favorite)
+                        handleSelectFavorite(
+                          favorite
+                        )
                       }
                       disabled={isEditing}
                       className="flex min-w-0 flex-1 items-center justify-between gap-4 text-left disabled:cursor-default"
                     >
-                      <span className="truncate font-medium">
-                        {favorite.cityName}
-                        {favorite.country &&
-                          `, ${favorite.country}`}
-                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-slate-900">
+                          {favorite.cityName}
+                        </p>
+
+                        {weather?.location && (
+                          <p className="mt-0.5 truncate text-xs text-slate-500">
+                            {weather.location.region &&
+                              `${weather.location.region}, `}
+                            {weather.location.country}
+                          </p>
+                        )}
+                      </div>
 
                       {!isEditing && (
                         <div className="flex shrink-0 items-center gap-3">
                           {weather ? (
                             <>
                               <img
-                                src={weather.current.condition.icon}
-                                alt={weather.current.condition.text}
+                                src={
+                                  weather
+                                    .current
+                                    .condition
+                                    .icon
+                                }
+                                alt={
+                                  weather
+                                    .current
+                                    .condition
+                                    .text
+                                }
                                 className="h-10 w-10 object-contain"
                               />
 
                               <span className="text-lg font-bold">
                                 {convertTemperature(
-                                  weather.current
+                                  weather
+                                    .current
                                     .temperatureCelsius,
                                   user?.temperatureUnit
                                 )}
@@ -226,16 +251,16 @@ function Favorites() {
                     {isEditing && (
                       <button
                         type="button"
-                        onClick={() =>
-                          handleDeleteFavorite(favorite.id)
-                        }
+                        onClick={() => handleDeleteFavorite(favorite.id)}
                         disabled={deletingId === favorite.id}
-                        className="shrink-0 rounded-xl bg-white px-3 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="group disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label={`Supprimer ${favorite.cityName} des favoris`}
                       >
-                        {deletingId === favorite.id
-                          ? 'Suppression...'
-                          : 'Supprimer'}
+                        {deletingId === favorite.id ? (
+                          <i className="fa-solid fa-spinner fa-spin text-slate-500"></i>
+                        ) : (
+                          <i className="fa-solid fa-trash text-[rgb(223,42,42)] transition-colors duration-200 group-hover:text-[rgb(170,28,28)]"></i>
+                        )}
                       </button>
                     )}
                   </div>

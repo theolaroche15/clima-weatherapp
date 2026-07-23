@@ -13,7 +13,6 @@ function Settings() {
     const [isUpdatingTemperature, setIsUpdatingTemperature] =
         useState(false)
 
-    const [isLocationEnabled, setIsLocationEnabled] = useState(true)
     const [isLoggingOut, setIsLoggingOut] = useState(false)
 
     const navigate = useNavigate()
@@ -125,40 +124,6 @@ function Settings() {
                                     Fahrenheit °F
                                 </button>
                             </div>
-                        </div>
-
-                        <div className="flex items-center justify-between gap-4 rounded-2xl bg-slate-100 p-4">
-                            <div>
-                                <h2 className="font-semibold">
-                                    Géolocalisation
-                                </h2>
-
-                                <p className="mt-1 text-sm text-slate-500">
-                                    Autoriser Clima à utiliser ta position.
-                                </p>
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setIsLocationEnabled(
-                                        (previousValue) => !previousValue
-                                    )
-                                }
-                                className={`relative h-7 w-12 shrink-0 rounded-full transition ${isLocationEnabled
-                                    ? 'bg-slate-900'
-                                    : 'bg-slate-300'
-                                    }`}
-                                aria-pressed={isLocationEnabled}
-                                aria-label="Activer ou désactiver la géolocalisation"
-                            >
-                                <span
-                                    className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-sm transition-all ${isLocationEnabled
-                                        ? 'left-6'
-                                        : 'left-1'
-                                        }`}
-                                />
-                            </button>
                         </div>
 
                         <div className="rounded-2xl bg-slate-100 p-4">

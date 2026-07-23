@@ -6,12 +6,29 @@ function Header() {
 
     return (
         <header className="flex items-center justify-between rounded-3xl bg-white px-4 py-3 shadow-sm">
-            <Link
-                to="/"
-                className="text-xl font-bold tracking-tight"
-            >
-                Clima
-            </Link>
+            <div>
+                {isAuthenticated ? (
+                    <Link
+                        to="/settings"
+                        className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                        aria-label="Ouvrir les réglages"
+                        title="Réglages"
+                    >
+                        <i className="fa-solid fa-gear"
+                            style={{ color: 'rgb(192, 192, 192)' }}></i>
+                    </Link>
+                ) : (
+                    <Link
+                        to="/login"
+                        className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                        aria-label="Se connecter"
+                        title="Connexion"
+                    >
+                        <i className="fa-solid fa-user"
+                            style={{ color: 'rgb(0, 0, 0)' }}></i>
+                    </Link>
+                )}
+            </div>
 
             <nav
                 className="flex items-center gap-2"
@@ -23,37 +40,20 @@ function Header() {
                     aria-label="Rechercher une ville"
                     title="Rechercher"
                 >
-                    🔍
+                    <i
+                        className="fa-solid fa-magnifying-glass"
+                        style={{ color: 'rgb(116, 192, 252)' }}></i>
                 </Link>
 
-                {isAuthenticated ? (
-                    <>
-                        <Link
-                            to="/favorites"
-                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
-                            aria-label="Afficher mes favoris"
-                            title="Favoris"
-                        >
-                            ⭐
-                        </Link>
-
-                        <Link
-                            to="/settings"
-                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
-                            aria-label="Ouvrir les réglages"
-                            title="Réglages"
-                        >
-                            ⚙️
-                        </Link>
-                    </>
-                ) : (
+                {isAuthenticated && (
                     <Link
-                        to="/login"
+                        to="/favorites"
                         className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
-                        aria-label="Se connecter"
-                        title="Connexion"
+                        aria-label="Afficher mes favoris"
+                        title="Favoris"
                     >
-                        👤
+                        <i className="fa-solid fa-star"
+                            style={{ color: 'rgb(255, 212, 59)' }}></i>
                     </Link>
                 )}
             </nav>

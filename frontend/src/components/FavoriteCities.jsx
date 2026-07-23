@@ -56,18 +56,19 @@ function FavoriteCities({ favorites, temperatureUnit }) {
     return (
         <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
             <div className="mb-5 text-center md:text-left">
-                <h2 className="text-xl font-bold">
-                    ⭐ Mes favoris
-                </h2>
+                <h2 className="flex items-center justify-center gap-2 text-xl font-bold md:justify-start">
+                    <i
+                        className="fa-solid fa-star"
+                        style={{ color: 'rgb(255, 212, 59)' }}
+                    ></i>
 
-                <p className="mt-2 text-sm text-slate-500">
-                    Accédez rapidement à vos villes favorites.
-                </p>
+                    Mes favoris
+                </h2>
             </div>
 
             {displayedFavorites.length === 0 ? (
                 <p className="text-center text-sm text-slate-500">
-                    Vous n&apos;avez encore aucun favori.
+                    Vous n&apos;avez aucun favori.
                 </p>
             ) : (
                 <div className="space-y-3">
@@ -78,25 +79,44 @@ function FavoriteCities({ favorites, temperatureUnit }) {
                             <button
                                 key={favorite.id}
                                 type="button"
-                                onClick={() => handleSelectFavorite(favorite)}
+                                onClick={() =>
+                                    handleSelectFavorite(favorite)
+                                }
                                 className="flex w-full items-center justify-between rounded-2xl bg-slate-100 px-4 py-3 text-left transition hover:bg-slate-200"
                             >
-                                <p className="min-w-0 truncate font-semibold">
-                                    {favorite.cityName}
-                                </p>
+                                <div className="min-w-0">
+                                    <p className="truncate font-semibold text-slate-900">
+                                        {favorite.cityName}
+                                    </p>
+
+                                    {weather?.location && (
+                                        <p className="mt-0.5 truncate text-xs text-slate-500">
+                                            {weather.location.region &&
+                                                `${weather.location.region}, `}
+                                            {weather.location.country}
+                                        </p>
+                                    )}
+                                </div>
 
                                 <div className="flex shrink-0 items-center gap-3">
                                     {weather ? (
                                         <>
                                             <img
-                                                src={weather.current.condition.icon}
-                                                alt={weather.current.condition.text}
+                                                src={
+                                                    weather.current.condition
+                                                        .icon
+                                                }
+                                                alt={
+                                                    weather.current.condition
+                                                        .text
+                                                }
                                                 className="h-10 w-10 object-contain"
                                             />
 
                                             <span className="text-lg font-bold">
                                                 {convertTemperature(
-                                                    weather.current.temperatureCelsius,
+                                                    weather.current
+                                                        .temperatureCelsius,
                                                     temperatureUnit
                                                 )}
                                                 {unit}
