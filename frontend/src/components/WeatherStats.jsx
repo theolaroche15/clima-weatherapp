@@ -104,53 +104,57 @@ function WeatherStats({
     ]
 
     return (
-        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
             <div className="mb-6 text-center md:text-left">
-                <h2 className="text-xl font-bold text-slate-900">
+                <h2 className="font-title text-xl text-(--color-text-primary)">
                     Informations météo
                 </h2>
             </div>
 
-            <div className="mb-5 rounded-3xl bg-slate-100 p-4 md:p-5">
-                <h3 className="mb-5 font-bold text-slate-900">
+            <div className="mb-5 rounded-3xl bg-(--color-background) p-4 md:p-5">
+                <h3 className="font-title mb-5 text-(--color-text-primary)">
                     Soleil
                 </h3>
 
                 <div className="flex items-center gap-3">
-                    <p className="shrink-0 text-sm font-bold text-slate-900 md:text-base">
+                    <p className="font-title shrink-0 text-sm text-(--color-text-primary) md:text-base">
                         {formatFrenchTime(today.astro?.sunrise)}
                     </p>
 
                     <div className="flex flex-1 items-center gap-2">
-                        <div className="h-px flex-1 bg-slate-300" />
+                        <div className="h-px flex-1 bg-(--color-text-secondary)" />
 
                         <span
                             aria-hidden="true"
                             className="text-xl md:text-2xl"
                         >
-                            <i className="fa-solid fa-sun"
-                                style={{ color: 'rgb(255, 199, 0)' }}></i>
+                            <i
+                                className="fa-solid fa-sun"
+                                style={{ color: 'rgb(255, 199, 0)' }}
+                            ></i>
                         </span>
 
-                        <div className="h-px flex-1 bg-slate-300" />
+                        <div className="h-px flex-1 bg-(--color-text-secondary)" />
                     </div>
 
-                    <p className="shrink-0 text-sm font-bold text-slate-900 md:text-base">
+                    <p className="font-title shrink-0 text-sm text-(--color-text-primary) md:text-base">
                         {formatFrenchTime(today.astro?.sunset)}
                     </p>
                 </div>
 
-                <div className="mt-3 flex justify-between text-xs text-slate-500">
+                <div className="mt-3 flex justify-between text-xs text-(--color-text-secondary)">
                     <span>Lever</span>
                     <span>Coucher</span>
                 </div>
             </div>
 
             <div className="grid items-stretch gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,1fr)]">
-                <div className="flex h-full flex-col rounded-3xl bg-slate-100 p-4 md:p-5">
-                    <h3 className="mb-4 flex items-center gap-2 font-bold text-slate-900">
-                        <i className="fa-solid fa-earth-africa fa-float"
-                            style={{ color: 'rgb(0, 142, 255)' }}></i>
+                <div className="flex h-full flex-col rounded-3xl bg-(--color-background) p-4 md:p-5">
+                    <h3 className="font-title mb-4 flex items-center gap-2 text-(--color-text-primary)">
+                        <i
+                            className="fa-solid fa-earth-africa fa-float"
+                            style={{ color: 'rgb(0, 142, 255)' }}
+                        ></i>
 
                         Conditions actuelles
                     </h3>
@@ -159,21 +163,21 @@ function WeatherStats({
                         {currentDetails.map((detail) => (
                             <div
                                 key={detail.title}
-                                className="flex min-h-14 flex-col justify-center border-b border-slate-200 py-2 md:flex-row md:items-center md:justify-between md:gap-3"
+                                className="flex min-h-14 flex-col justify-center border-b border-(--color-text-secondary) py-2 md:flex-row md:items-center md:justify-between md:gap-3"
                             >
                                 <div>
-                                    <p className="text-sm text-slate-500">
+                                    <p className="text-sm text-(--color-text-secondary)">
                                         {detail.title}
                                     </p>
 
                                     {detail.description && (
-                                        <p className="mt-1 text-xs text-slate-400">
+                                        <p className="mt-1 text-xs text-(--color-text-secondary)">
                                             {detail.description}
                                         </p>
                                     )}
                                 </div>
 
-                                <p className="mt-1 shrink-0 text-sm font-bold text-slate-900 md:mt-0">
+                                <p className="font-detail mt-1 shrink-0 text-sm text-(--color-text-primary) md:mt-0">
                                     {detail.value}
                                 </p>
                             </div>
@@ -181,25 +185,27 @@ function WeatherStats({
                     </div>
                 </div>
 
-                <div className="flex h-full flex-col rounded-3xl bg-slate-100 p-4 md:p-5">
-                    <h3 className="mb-4 flex items-center gap-2 font-bold text-slate-900">
-                        <i className="fa-solid fa-meteor fa-float"
-                            style={{ color: 'rgb(235, 119, 57)' }}></i>
+                <div className="flex h-full flex-col rounded-3xl bg-(--color-background) p-4 md:p-5">
+                    <h3 className="font-title mb-4 flex items-center gap-2 text-(--color-text-primary)">
+                        <i
+                            className="fa-solid fa-meteor fa-float"
+                            style={{ color: 'rgb(235, 119, 57)' }}
+                        ></i>
 
                         Prévisions du jour
                     </h3>
 
-                    <div className="grid flex-1 grid-rows-8 divide-y divide-slate-200">
+                    <div className="grid flex-1 grid-rows-8 divide-y divide-(--color-text-secondary)">
                         {dailyDetails.map((detail) => (
                             <div
                                 key={detail.title}
                                 className="flex min-h-11 items-center justify-between gap-4"
                             >
-                                <p className="text-sm text-slate-500">
+                                <p className="text-sm text-(--color-text-secondary)">
                                     {detail.title}
                                 </p>
 
-                                <p className="shrink-0 text-sm font-bold text-slate-900">
+                                <p className="font-detail shrink-0 text-sm text-(--color-text-primary)">
                                     {detail.value}
                                 </p>
                             </div>

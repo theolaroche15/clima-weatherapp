@@ -54,8 +54,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 10)]
     private ?string $temperatureUnit = null;
 
-    #[ORM\Column]
-    private ?bool $notificationsEnabled = null;
+    #[ORM\Column(length: 10, options: ['default' => 'light'])]
+    private ?string $theme = 'light';
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -72,17 +72,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: SearchHistory::class, mappedBy: 'user')]
     private Collection $searchHistories;
 
-    /**
-     * @var Collection<int, WeatherAlert>
-     */
-    #[ORM\OneToMany(targetEntity: WeatherAlert::class, mappedBy: 'user')]
-    private Collection $weatherAlerts;
-
     public function __construct()
     {
         $this->favorites = new ArrayCollection();
         $this->searchHistories = new ArrayCollection();
-        $this->weatherAlerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,14 +183,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isNotificationsEnabled(): ?bool
+    public function getTheme(): ?string
     {
-        return $this->notificationsEnabled;
+        return $this->theme;
     }
 
-    public function setNotificationsEnabled(bool $notificationsEnabled): static
+    public function setTheme(string $theme): static
     {
-        $this->notificationsEnabled = $notificationsEnabled;
+        $this->theme = $theme;
 
         return $this;
     }
@@ -268,36 +261,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($searchHistory->getUser() === $this) {
                 $searchHistory->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, WeatherAlert>
-     */
-    public function getWeatherAlerts(): Collection
-    {
-        return $this->weatherAlerts;
-    }
-
-    public function addWeatherAlert(WeatherAlert $weatherAlert): static
-    {
-        if (!$this->weatherAlerts->contains($weatherAlert)) {
-            $this->weatherAlerts->add($weatherAlert);
-            $weatherAlert->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeWeatherAlert(WeatherAlert $weatherAlert): static
-    {
-        if ($this->weatherAlerts->removeElement($weatherAlert)) {
-            // set the owning side to null (unless already changed)
-            if ($weatherAlert->getUser() === $this) {
-                $weatherAlert->setUser(null);
             }
         }
 

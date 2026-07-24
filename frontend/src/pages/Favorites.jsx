@@ -119,24 +119,41 @@ function Favorites() {
   }
 
   return (
-    <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
+    <main
+      className="
+        min-h-screen
+        bg-(--color-background)
+        text-(--color-text-primary)
+      "
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5 md:p-6">
         <div className="hidden md:block">
           <Header />
         </div>
 
-        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
-          <div className="mb-6 flex items-center justify-between gap-3">
+        <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
+          <div className="mb-8 flex items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Link
                 to="/"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                className="
+                  flex
+                  h-10
+                  w-10
+                  shrink-0
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  text-lg
+                  transition
+                  hover:bg-(--color-background)
+                "
                 aria-label="Retour à l'accueil"
               >
                 ←
               </Link>
 
-              <h1 className="truncate text-2xl font-bold">
+              <h1 className="hidden lg:block font-title text-2xl">
                 Favoris
               </h1>
             </div>
@@ -145,7 +162,16 @@ function Favorites() {
               {!isEditing && (
                 <Link
                   to="/search"
-                  className="rounded-2xl bg-slate-100 px-4 py-2 text-sm font-medium transition hover:bg-slate-200"
+                  className="
+                    rounded-2xl
+                    px-4
+                    py-2
+                    text-sm
+                    font-detail
+                    text-(--color-text-primary)
+                    transition
+                    hover:bg-(--color-background)
+                  "
                 >
                   Ajouter
                 </Link>
@@ -155,7 +181,16 @@ function Favorites() {
                 <button
                   type="button"
                   onClick={handleToggleEditMode}
-                  className="rounded-2xl bg-slate-100 px-4 py-2 text-sm font-medium transition hover:bg-slate-200"
+                  className="
+                    rounded-2xl
+                    px-4
+                    py-2
+                    text-sm
+                    font-detail
+                    text-(--color-text-primary)
+                    transition
+                    hover:bg-(--color-background)
+                  "
                 >
                   {isEditing ? 'Terminé' : 'Modifier'}
                 </button>
@@ -170,7 +205,7 @@ function Favorites() {
           )}
 
           {loading ? (
-            <p className="text-center text-sm text-slate-500">
+            <p className="text-center text-sm text-(--color-text-secondary)">
               Chargement des favoris...
             </p>
           ) : favorites.length > 0 ? (
@@ -182,26 +217,36 @@ function Favorites() {
                 return (
                   <div
                     key={favorite.id}
-                    className={`flex items-center justify-between gap-3 rounded-2xl bg-slate-100 px-4 py-3 transition ${!isEditing ? 'hover:bg-slate-200' : ''
-                      }`}
+                    className={`
+                      flex
+                      items-center
+                      justify-between
+                      gap-3
+                      rounded-2xl
+                      px-4
+                      py-3
+                      transition
+                      ${!isEditing
+                        ? 'hover:bg-(--color-background)'
+                        : ''
+                      }
+                    `}
                   >
                     <button
                       type="button"
                       onClick={() =>
-                        handleSelectFavorite(
-                          favorite
-                        )
+                        handleSelectFavorite(favorite)
                       }
                       disabled={isEditing}
                       className="flex min-w-0 flex-1 items-center justify-between gap-4 text-left disabled:cursor-default"
                     >
                       <div className="min-w-0">
-                        <p className="truncate font-medium text-slate-900">
+                        <p className="font-detail truncate text-(--color-text-primary)">
                           {favorite.cityName}
                         </p>
 
                         {weather?.location && (
-                          <p className="mt-0.5 truncate text-xs text-slate-500">
+                          <p className="mt-0.5 truncate text-xs text-(--color-text-secondary)">
                             {weather.location.region &&
                               `${weather.location.region}, `}
                             {weather.location.country}
@@ -229,7 +274,7 @@ function Favorites() {
                                 className="h-10 w-10 object-contain"
                               />
 
-                              <span className="text-lg font-bold">
+                              <span className="font-title text-lg">
                                 {convertTemperature(
                                   weather
                                     .current
@@ -240,7 +285,7 @@ function Favorites() {
                               </span>
                             </>
                           ) : (
-                            <span className="text-sm text-slate-400">
+                            <span className="text-sm text-(--color-text-secondary)">
                               Indisponible
                             </span>
                           )}
@@ -251,13 +296,15 @@ function Favorites() {
                     {isEditing && (
                       <button
                         type="button"
-                        onClick={() => handleDeleteFavorite(favorite.id)}
+                        onClick={() =>
+                          handleDeleteFavorite(favorite.id)
+                        }
                         disabled={deletingId === favorite.id}
                         className="group disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label={`Supprimer ${favorite.cityName} des favoris`}
                       >
                         {deletingId === favorite.id ? (
-                          <i className="fa-solid fa-spinner fa-spin text-slate-500"></i>
+                          <i className="fa-solid fa-spinner fa-spin text-(--color-text-secondary)"></i>
                         ) : (
                           <i className="fa-solid fa-trash text-[rgb(223,42,42)] transition-colors duration-200 group-hover:text-[rgb(170,28,28)]"></i>
                         )}
@@ -269,13 +316,25 @@ function Favorites() {
             </div>
           ) : (
             <div className="text-center">
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-(--color-text-secondary)">
                 Aucun favori enregistré.
               </p>
 
               <Link
                 to="/search"
-                className="mt-4 inline-flex rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+                className="
+                  mt-4
+                  inline-flex
+                  rounded-2xl
+                  bg-(--color-secondary)
+                  px-5
+                  py-3
+                  text-sm
+                  font-detail
+                  text-(--color-primary)
+                  transition
+                  hover:opacity-80
+                "
               >
                 Ajouter un favori
               </Link>

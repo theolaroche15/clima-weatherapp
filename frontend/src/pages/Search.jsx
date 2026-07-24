@@ -113,23 +113,39 @@ function Search() {
     }
 
     return (
-        <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
+        <main
+            className="
+                min-h-screen
+                bg-(--color-background)
+                text-(--color-text-primary)
+            "
+        >
             <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5 md:p-6">
                 <div className="hidden md:block">
                     <Header />
                 </div>
 
-                <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
-                    <div className="mb-6 flex items-center gap-3">
+                <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
+                    <div className="mb-8 flex items-center gap-3">
                         <Link
                             to="/"
                             aria-label="Retour à l'accueil"
-                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                            className="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                text-lg
+                                transition
+                                hover:bg-(--color-background)
+                            "
                         >
                             ←
                         </Link>
 
-                        <h1 className="text-2xl font-bold">
+                        <h1 className="hidden lg:block font-title text-2xl">
                             Recherche
                         </h1>
                     </div>
@@ -146,24 +162,46 @@ function Search() {
                             }
                             placeholder="Rechercher une ville..."
                             autoFocus
-                            className="w-full rounded-2xl bg-slate-100 px-4 py-4 text-center text-sm outline-none placeholder:text-slate-400 md:text-left"
+                            className="
+                                w-full
+                                rounded-2xl
+                                bg-(--color-background)
+                                px-4
+                                py-4
+                                text-center
+                                text-sm
+                                text-(--color-text-primary)
+                                outline-none
+                                placeholder:text-(--color-text-secondary)
+                                md:text-left
+                            "
                         />
 
                         <button
                             type="submit"
-                            className="rounded-xl bg-[#3691eb] px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-[#2b82d8]"
+                            className="
+                                rounded-xl
+                                bg-[#3691eb]
+                                px-4
+                                py-2
+                                text-sm
+                                font-detail
+                                text-white
+                                transition-colors
+                                duration-200
+                                hover:bg-[#2b82d8]
+                            "
                         >
                             Rechercher
                         </button>
                     </form>
 
                     <div
-                        className="mt-6 border-t border-slate-100 pt-5"
+                        className="mt-6 pt-5"
                         aria-live="polite"
                     >
-
                         {!showResults && user && historyLoading && (
-                            <p className="text-center text-sm text-slate-500 md:text-left">
+                            <p className="text-center text-sm text-(--color-text-secondary) md:text-left">
                                 Chargement de l&apos;historique...
                             </p>
                         )}
@@ -172,7 +210,7 @@ function Search() {
                             user &&
                             !historyLoading &&
                             history.length === 0 && (
-                                <p className="text-center text-sm text-slate-500 md:text-left">
+                                <p className="text-center text-sm text-(--color-text-secondary) md:text-left">
                                     Aucune recherche récente.
                                 </p>
                             )}
@@ -183,7 +221,7 @@ function Search() {
                             history.length > 0 && (
                                 <div>
                                     <div className="mb-4 flex items-center justify-between">
-                                        <h2 className="font-semibold">
+                                        <h2 className="font-title">
                                             Recherches récentes
                                         </h2>
 
@@ -213,14 +251,26 @@ function Search() {
                                                             city.longitude,
                                                     })
                                                 }
-                                                className="flex w-full items-center justify-between rounded-2xl bg-slate-100 px-4 py-3 text-left transition hover:bg-slate-200"
+                                                className="
+                                                    flex
+                                                    w-full
+                                                    items-center
+                                                    justify-between
+                                                    rounded-2xl
+                                                    px-4
+                                                    py-3
+                                                    text-left
+                                                    text-(--color-text-primary)
+                                                    transition
+                                                    hover:bg-(--color-background)
+                                                "
                                             >
                                                 <span>
-                                                    <span className="block font-medium">
+                                                    <span className="font-detail block">
                                                         {city.cityName}
                                                     </span>
 
-                                                    <span className="block text-sm text-slate-500">
+                                                    <span className="block text-sm text-(--color-text-secondary)">
                                                         {[
                                                             city.region,
                                                             city.country,
@@ -232,7 +282,7 @@ function Search() {
 
                                                 <span
                                                     aria-hidden="true"
-                                                    className="text-slate-400"
+                                                    className="text-(--color-text-primary)"
                                                 >
                                                     →
                                                 </span>
@@ -243,7 +293,7 @@ function Search() {
                             )}
 
                         {showResults && loading && (
-                            <p className="text-center text-sm text-slate-500 md:text-left">
+                            <p className="text-center text-sm text-(--color-text-secondary) md:text-left">
                                 Recherche en cours...
                             </p>
                         )}
@@ -258,7 +308,7 @@ function Search() {
                             !loading &&
                             !error &&
                             results.length === 0 && (
-                                <p className="text-center text-sm text-slate-500 md:text-left">
+                                <p className="text-center text-sm text-(--color-text-secondary) md:text-left">
                                     Aucune ville trouvée.
                                 </p>
                             )}
@@ -275,14 +325,26 @@ function Search() {
                                             onClick={() =>
                                                 handleCitySelect(city)
                                             }
-                                            className="flex w-full items-center justify-between rounded-2xl bg-slate-100 px-4 py-3 text-left transition hover:bg-slate-200"
+                                            className="
+                                                flex
+                                                w-full
+                                                items-center
+                                                justify-between
+                                                rounded-2xl
+                                                px-4
+                                                py-3
+                                                text-left
+                                                text-(--color-text-primary)
+                                                transition
+                                                hover:bg-(--color-background)
+                                            "
                                         >
                                             <span>
-                                                <span className="block font-medium">
+                                                <span className="font-detail block">
                                                     {city.name}
                                                 </span>
 
-                                                <span className="block text-sm text-slate-500">
+                                                <span className="block text-sm text-(--color-text-secondary)">
                                                     {[
                                                         city.region,
                                                         city.country,
@@ -294,7 +356,7 @@ function Search() {
 
                                             <span
                                                 aria-hidden="true"
-                                                className="text-slate-400"
+                                                className="text-(--color-text-primary)"
                                             >
                                                 →
                                             </span>

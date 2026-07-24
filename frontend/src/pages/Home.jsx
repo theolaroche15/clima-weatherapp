@@ -17,13 +17,17 @@ import FavoriteCities from '../components/FavoriteCities'
 function Home() {
   const location = useLocation()
   const selectedCity = location.state?.city
-  const cityName = selectedCity?.name ?? 'Paris'
   const { user } = useAuth()
 
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [favorites, setFavorites] = useState([])
+
+  const cityName =
+    selectedCity?.name ??
+    favorites[0]?.cityName ??
+    'Paris'
 
   useEffect(() => {
     setLoading(true)
@@ -58,12 +62,18 @@ function Home() {
   }, [user])
 
   return (
-    <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
+    <main
+      className="
+        min-h-screen
+        bg-(--color-background)
+        text-(--color-text-primary)
+      "
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5">
         <Header />
 
         {loading && (
-          <p className="text-center text-sm text-[#6b7280]">
+          <p className="text-center text-sm text-(--color-text-secondary)">
             Chargement...
           </p>
         )}
@@ -105,6 +115,7 @@ function Home() {
             {user && (
               <FavoriteCities
                 favorites={favorites}
+                currentCity={cityName}
                 temperatureUnit={user.temperatureUnit}
               />
             )}

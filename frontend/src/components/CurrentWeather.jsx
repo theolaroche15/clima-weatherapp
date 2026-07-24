@@ -67,12 +67,12 @@ function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
     }
 
     return (
-        <section className="rounded-4xl bg-white p-6 shadow-sm md:p-8">
+        <section className="rounded-4xl bg-(--color-primary) p-6 md:p-8">
             <div className="flex flex-col items-center text-center md:flex-row md:items-stretch md:justify-between md:text-left">
                 <div className="flex flex-col md:justify-between">
                     <div>
                         <div className="mb-3 flex items-center gap-3">
-                            <h2 className="text-2xl font-bold md:text-3xl">
+                            <h2 className="font-title text-2xl md:text-3xl">
                                 {weather.location.name}, {weather.location.country}
                             </h2>
 
@@ -99,13 +99,13 @@ function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
                             )}
                         </div>
 
-                        <p className="mt-2 text-sm text-slate-500">
+                        <p className="mt-2 text-sm text-(--color-text-secondary)">
                             {formatLocalDateTime(weather.location.localTime)}
                         </p>
                     </div>
 
                     <div className="mt-8 md:mt-12">
-                        <p className="text-7xl font-black leading-none tracking-tight md:text-8xl">
+                        <p className="font-title text-7xl leading-none tracking-tight md:text-8xl">
                             {convertTemperature(
                                 weather.current.temperatureCelsius,
                                 temperatureUnit
@@ -113,7 +113,7 @@ function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
                             {unit}
                         </p>
 
-                        <p className="mt-3 hidden text-sm text-slate-500 md:block">
+                        <p className="mt-3 hidden text-sm text-(--color-text-secondary) md:block">
                             Ressenti{' '}
                             {convertTemperature(
                                 weather.current.feelsLikeCelsius,
@@ -139,12 +139,12 @@ function CurrentWeather({ weather, temperatureUnit, favorites, setFavorites }) {
                                 className="h-10 w-10 object-contain md:hidden"
                             />
 
-                            <p className="text-base font-semibold text-slate-700">
+                            <p className="font-detail text-base text-(--color-text-primary)">
                                 {weather.current.condition.text}
                             </p>
                         </div>
 
-                        <div className="mt-3 flex justify-center gap-5 text-sm font-medium text-slate-500 md:justify-end">
+                        <div className="mt-3 flex justify-center gap-5 text-sm font-detail text-(--color-text-secondary) md:justify-end">
                             <span>
                                 ↑{' '}
                                 {convertTemperature(

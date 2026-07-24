@@ -17,9 +17,9 @@ function DailyForecast({ daily = [], temperatureUnit }) {
     }
 
     return (
-        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
             <div className="mb-5 text-center md:text-left">
-                <h2 className="text-xl font-bold">
+                <h2 className="font-title text-xl">
                     Prévisions des prochains jours
                 </h2>
             </div>
@@ -28,14 +28,14 @@ function DailyForecast({ daily = [], temperatureUnit }) {
                 {daily.map((forecast) => (
                     <article
                         key={forecast.date}
-                        className="flex items-center justify-between rounded-2xl bg-slate-100 px-4 py-3"
+                        className="flex items-center justify-between gap-2 rounded-2xl bg-(--color-background) px-3 py-3 sm:gap-4 sm:px-4"
                     >
-                        <div className="min-w-23.75">
-                            <p className="font-bold capitalize">
+                        <div className="min-w-18 flex-1 sm:min-w-22">
+                            <p className="font-title truncate text-sm capitalize sm:text-base">
                                 {formatDay(forecast.date)}
                             </p>
 
-                            <p className="text-sm text-slate-500">
+                            <p className="truncate text-xs text-(--color-text-secondary) sm:text-sm">
                                 {forecast.condition.text}
                             </p>
                         </div>
@@ -43,10 +43,10 @@ function DailyForecast({ daily = [], temperatureUnit }) {
                         <img
                             src={forecast.condition.icon}
                             alt={forecast.condition.text}
-                            className="h-12 w-12 object-contain"
+                            className="h-10 w-10 shrink-0 object-contain sm:h-12 sm:w-12"
                         />
 
-                        <div className="flex gap-4 text-sm font-medium text-slate-500">
+                        <div className="flex shrink-0 gap-2 text-xs font-detail text-(--color-text-secondary) sm:gap-4 sm:text-sm">
                             <span>
                                 ↑{' '}
                                 {convertTemperature(

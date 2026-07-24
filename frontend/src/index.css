@@ -1,1 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600&display=swap');
 @import "tailwindcss";
+
+:root {
+    --color-primary: #ffffff;
+    --color-secondary: #242424;
+
+    --color-background: #e7e7e7;
+
+    --color-text-primary: #000000;
+    --color-text-secondary: #808080;
+
+    --font-title: 'Poppins', sans-serif;
+    --font-text: 'Inter', sans-serif;
+}
+
+.dark {
+    --color-primary: #242424;
+    --color-secondary: #ffffff;
+
+    --color-background: #383838;
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #808080;
+}
+
+html {
+    min-width: 320px;
+    min-height: 100%;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+
+    font-family: var(--font-text);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+.font-title {
+    font-family: var(--font-title);
+    font-weight: 600;
+}
+
+.font-text {
+    font-family: var(--font-text);
+    font-weight: 400;
+}
+
+.font-detail {
+    font-family: var(--font-text);
+    font-weight: 500;
+}

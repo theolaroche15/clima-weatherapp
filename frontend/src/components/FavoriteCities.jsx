@@ -7,11 +7,17 @@ import {
     getTemperatureUnit,
 } from '../utils/temperature'
 
-function FavoriteCities({ favorites, temperatureUnit }) {
+function FavoriteCities({ favorites, currentCity, temperatureUnit }) {
     const navigate = useNavigate()
     const [favoritesWeather, setFavoritesWeather] = useState({})
 
-    const displayedFavorites = favorites.slice(0, 3)
+    const displayedFavorites = favorites
+        .filter(
+            (favorite) =>
+                favorite.cityName.toLowerCase() !==
+                currentCity.toLowerCase()
+        )
+        .slice(0, 3)
     const unit = getTemperatureUnit(temperatureUnit)
 
     useEffect(() => {
@@ -41,7 +47,7 @@ function FavoriteCities({ favorites, temperatureUnit }) {
         }
 
         loadFavoritesWeather()
-    }, [favorites])
+    }, [favorites, currentCity])
 
     function handleSelectFavorite(favorite) {
         navigate('/', {
@@ -54,9 +60,9 @@ function FavoriteCities({ favorites, temperatureUnit }) {
     }
 
     return (
-        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
             <div className="mb-5 text-center md:text-left">
-                <h2 className="flex items-center justify-center gap-2 text-xl font-bold md:justify-start">
+                <h2 className="font-title flex items-center justify-center gap-2 text-xl md:justify-start">
                     <i
                         className="fa-solid fa-star"
                         style={{ color: 'rgb(255, 212, 59)' }}
@@ -67,7 +73,7 @@ function FavoriteCities({ favorites, temperatureUnit }) {
             </div>
 
             {displayedFavorites.length === 0 ? (
-                <p className="text-center text-sm text-slate-500">
+                <p className="text-center text-sm text-(--color-text-secondary)">
                     Vous n&apos;avez aucun favori.
                 </p>
             ) : (
@@ -82,15 +88,27 @@ function FavoriteCities({ favorites, temperatureUnit }) {
                                 onClick={() =>
                                     handleSelectFavorite(favorite)
                                 }
-                                className="flex w-full items-center justify-between rounded-2xl bg-slate-100 px-4 py-3 text-left transition hover:bg-slate-200"
+                                className="
+                                    flex
+                                    w-full
+                                    items-center
+                                    justify-between
+                                    rounded-2xl
+                                    px-4
+                                    py-3
+                                    text-left
+                                    text-(--color-text-primary)
+                                    transition
+                                    hover:bg-(--color-background)
+                                "
                             >
                                 <div className="min-w-0">
-                                    <p className="truncate font-semibold text-slate-900">
+                                    <p className="font-detail truncate">
                                         {favorite.cityName}
                                     </p>
 
                                     {weather?.location && (
-                                        <p className="mt-0.5 truncate text-xs text-slate-500">
+                                        <p className="mt-0.5 truncate text-xs text-(--color-text-secondary)">
                                             {weather.location.region &&
                                                 `${weather.location.region}, `}
                                             {weather.location.country}
@@ -113,7 +131,7 @@ function FavoriteCities({ favorites, temperatureUnit }) {
                                                 className="h-10 w-10 object-contain"
                                             />
 
-                                            <span className="text-lg font-bold">
+                                            <span className="font-title text-lg">
                                                 {convertTemperature(
                                                     weather.current
                                                         .temperatureCelsius,
@@ -123,7 +141,7 @@ function FavoriteCities({ favorites, temperatureUnit }) {
                                             </span>
                                         </>
                                     ) : (
-                                        <span className="text-sm text-slate-400">
+                                        <span className="text-sm text-(--color-text-secondary)">
                                             Indisponible
                                         </span>
                                     )}
@@ -137,7 +155,18 @@ function FavoriteCities({ favorites, temperatureUnit }) {
             <button
                 type="button"
                 onClick={() => navigate('/favorites')}
-                className="mt-5 w-full rounded-2xl bg-slate-900 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+                className="
+                    mt-5
+                    w-full
+                    rounded-2xl
+                    bg-(--color-secondary)
+                    py-3
+                    text-sm
+                    font-detail
+                    text-(--color-primary)
+                    transition
+                    hover:opacity-80
+                "
             >
                 Afficher tous les favoris
             </button>

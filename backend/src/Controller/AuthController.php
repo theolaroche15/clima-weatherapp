@@ -69,7 +69,7 @@ final class AuthController extends AbstractController
         $user->setEmail($email);
         $user->setUsername($username);
         $user->setTemperatureUnit('celsius');
-        $user->setNotificationsEnabled(false);
+        $user->setTheme('light');
         $user->setCreatedAt(new \DateTimeImmutable());
         $userErrors = $validator->validate($user);
 
@@ -117,7 +117,7 @@ final class AuthController extends AbstractController
                 'username' => $user->getUsername(),
                 'roles' => $user->getRoles(),
                 'temperatureUnit' => $user->getTemperatureUnit(),
-                'notificationsEnabled' => $user->isNotificationsEnabled(),
+                'theme' => $user->getTheme(),
             ],
         ]);
     }
@@ -143,20 +143,39 @@ final class AuthController extends AbstractController
         }
 
         $temperatureUnit = $data['temperatureUnit'] ?? null;
+        $theme = $data['theme'] ?? null;
 
-        if ($temperatureUnit === null) {
+        if ($temperatureUnit === null && $theme === null) {
             return $this->json([
-                'message' => 'Temperature unit is required.',
+                'message' => 'At least one setting is required.',
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if (!in_array($temperatureUnit, ['celsius', 'fahrenheit'], true)) {
+        if (
+            $temperatureUnit !== null
+            && !in_array($temperatureUnit, ['celsius', 'fahrenheit'], true)
+        ) {
             return $this->json([
                 'message' => 'Temperature unit must be celsius or fahrenheit.',
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $user->setTemperatureUnit($temperatureUnit);
+        if (
+            $theme !== null
+            && !in_array($theme, ['light', 'dark'], true)
+        ) {
+            return $this->json([
+                'message' => 'Theme must be light or dark.',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($temperatureUnit !== null) {
+            $user->setTemperatureUnit($temperatureUnit);
+        }
+
+        if ($theme !== null) {
+            $user->setTheme($theme);
+        }
 
         $entityManager->flush();
 
@@ -168,7 +187,7 @@ final class AuthController extends AbstractController
                 'username' => $user->getUsername(),
                 'roles' => $user->getRoles(),
                 'temperatureUnit' => $user->getTemperatureUnit(),
-                'notificationsEnabled' => $user->isNotificationsEnabled(),
+                'theme' => $user->getTheme(),
             ],
         ], Response::HTTP_OK);
     }

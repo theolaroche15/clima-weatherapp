@@ -99,24 +99,42 @@ function Login() {
     }
 
     return (
-        <main className="min-h-screen bg-[#e7e7e7] text-[#1e1e2e]">
+        <main
+            className="
+                min-h-screen
+                bg-(--color-background)
+                text-(--color-text-primary)
+            "
+        >
             <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 px-4 py-5 md:p-6">
                 <div className="hidden md:block">
                     <Header />
                 </div>
 
-                <section className="mx-auto w-full max-w-xl rounded-4xl bg-white p-5 shadow-sm md:p-6">
-                    <div className="mb-6 flex items-center gap-3">
+                <section className="mx-auto w-full max-w-xl rounded-4xl bg-(--color-primary) p-5 md:p-6">
+                    <div className="mb-8 flex items-center gap-3">
                         <Link
                             to="/"
-                            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-lg transition hover:bg-slate-200"
+                            className="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                text-lg
+                                transition
+                                hover:bg-(--color-background)
+                            "
                             aria-label="Retour à l'accueil"
                         >
                             ←
                         </Link>
 
-                        <h1 className="text-2xl font-bold">
-                            {isRegisterMode ? 'Créer un compte' : 'Se connecter'}
+                        <h1 className="hidden lg:block font-title text-2xl">
+                            {isRegisterMode
+                                ? 'Créer un compte'
+                                : 'Se connecter'}
                         </h1>
                     </div>
 
@@ -143,7 +161,7 @@ function Login() {
                             <div>
                                 <label
                                     htmlFor="username"
-                                    className="mb-2 block text-sm font-medium text-slate-700"
+                                    className="font-detail mb-2 block text-sm text-(--color-text-primary)"
                                 >
                                     Nom d'utilisateur
                                 </label>
@@ -155,8 +173,20 @@ function Login() {
                                     autoComplete="username"
                                     required
                                     value={username}
-                                    onChange={(event) => setUsername(event.target.value)}
-                                    className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
+                                    onChange={(event) =>
+                                        setUsername(event.target.value)
+                                    }
+                                    className="
+                                        w-full
+                                        rounded-2xl
+                                        bg-(--color-background)
+                                        px-4
+                                        py-3
+                                        text-sm
+                                        text-(--color-text-primary)
+                                        outline-none
+                                        placeholder:text-(--color-text-secondary)
+                                    "
                                     placeholder="Ton nom d’utilisateur"
                                 />
                             </div>
@@ -165,7 +195,7 @@ function Login() {
                         <div>
                             <label
                                 htmlFor="email"
-                                className="mb-2 block text-sm font-medium text-slate-700"
+                                className="font-detail mb-2 block text-sm text-(--color-text-primary)"
                             >
                                 Email
                             </label>
@@ -177,8 +207,20 @@ function Login() {
                                 autoComplete="email"
                                 required
                                 value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
+                                onChange={(event) =>
+                                    setEmail(event.target.value)
+                                }
+                                className="
+                                    w-full
+                                    rounded-2xl
+                                    bg-(--color-background)
+                                    px-4
+                                    py-3
+                                    text-sm
+                                    text-(--color-text-primary)
+                                    outline-none
+                                    placeholder:text-(--color-text-secondary)
+                                "
                                 placeholder="exemple@email.com"
                             />
                         </div>
@@ -186,7 +228,7 @@ function Login() {
                         <div>
                             <label
                                 htmlFor="password"
-                                className="mb-2 block text-sm font-medium text-slate-700"
+                                className="font-detail mb-2 block text-sm text-(--color-text-primary)"
                             >
                                 Mot de passe
                             </label>
@@ -202,8 +244,20 @@ function Login() {
                                 }
                                 required
                                 value={password}
-                                onChange={(event) => setPassword(event.target.value)}
-                                className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
+                                onChange={(event) =>
+                                    setPassword(event.target.value)
+                                }
+                                className="
+                                    w-full
+                                    rounded-2xl
+                                    bg-(--color-background)
+                                    px-4
+                                    py-3
+                                    text-sm
+                                    text-(--color-text-primary)
+                                    outline-none
+                                    placeholder:text-(--color-text-secondary)
+                                "
                                 placeholder="Ton mot de passe"
                             />
                         </div>
@@ -212,7 +266,7 @@ function Login() {
                             <div>
                                 <label
                                     htmlFor="passwordConfirmation"
-                                    className="mb-2 block text-sm font-medium text-slate-700"
+                                    className="font-detail mb-2 block text-sm text-(--color-text-primary)"
                                 >
                                     Confirmer le mot de passe
                                 </label>
@@ -225,9 +279,21 @@ function Login() {
                                     required
                                     value={passwordConfirmation}
                                     onChange={(event) =>
-                                        setPasswordConfirmation(event.target.value)
+                                        setPasswordConfirmation(
+                                            event.target.value
+                                        )
                                     }
-                                    className="w-full rounded-2xl bg-slate-100 px-4 py-3 text-sm outline-none"
+                                    className="
+                                        w-full
+                                        rounded-2xl
+                                        bg-(--color-background)
+                                        px-4
+                                        py-3
+                                        text-sm
+                                        text-(--color-text-primary)
+                                        outline-none
+                                        placeholder:text-(--color-text-secondary)
+                                    "
                                     placeholder="Confirme ton mot de passe"
                                 />
                             </div>
@@ -236,7 +302,20 @@ function Login() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="
+                                w-full
+                                rounded-2xl
+                                bg-(--color-secondary)
+                                px-4
+                                py-3
+                                text-sm
+                                font-detail
+                                text-(--color-primary)
+                                transition
+                                hover:opacity-80
+                                disabled:cursor-not-allowed
+                                disabled:opacity-60
+                            "
                         >
                             {isSubmitting
                                 ? 'Chargement...'
@@ -249,13 +328,22 @@ function Login() {
                     <button
                         type="button"
                         onClick={() => {
-                            setIsRegisterMode((previousValue) => !previousValue)
+                            setIsRegisterMode(
+                                (previousValue) => !previousValue
+                            )
                             setError('')
                             setSuccessMessage('')
                             setPassword('')
                             setPasswordConfirmation('')
                         }}
-                        className="mt-5 w-full text-center text-sm font-medium text-slate-600"
+                        className="
+                            mt-5
+                            w-full
+                            text-center
+                            text-sm
+                            font-detail
+                            text-(--color-text-primary)
+                        "
                     >
                         {isRegisterMode
                             ? 'J’ai déjà un compte'

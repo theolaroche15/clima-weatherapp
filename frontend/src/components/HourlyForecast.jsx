@@ -27,18 +27,20 @@ function HourlyForecast({
         .slice(0, 24)
 
     return (
-        <section className="rounded-4xl bg-white p-5 shadow-sm md:p-6">
+        <section className="rounded-4xl bg-(--color-primary) p-5 md:p-6">
             <div className="mb-5 text-center md:text-left">
-                <h2 className="text-xl font-bold">Prévisions horaires</h2>
+                <h2 className="font-title text-xl">
+                    Prévisions horaires
+                </h2>
             </div>
 
             <div className="flex gap-3 overflow-x-auto pb-2">
                 {upcomingHours.map((forecast) => (
                     <article
                         key={forecast.time}
-                        className="min-w-22 shrink-0 rounded-2xl bg-slate-100 p-4 text-center"
+                        className="min-w-22 shrink-0 rounded-2xl bg-(--color-background) p-4 text-center"
                     >
-                        <p className="text-sm font-semibold text-slate-500">
+                        <p className="font-detail text-sm text-(--color-text-secondary)">
                             {formatHour(forecast.time)}
                         </p>
 
@@ -48,7 +50,7 @@ function HourlyForecast({
                             className="mx-auto my-3 h-12 w-12 object-contain"
                         />
 
-                        <p className="text-lg font-bold">
+                        <p className="font-title text-lg">
                             {convertTemperature(
                                 forecast.temperatureCelsius,
                                 temperatureUnit

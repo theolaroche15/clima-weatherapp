@@ -1,4 +1,7 @@
+import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
+
+import { useAuth } from './contexts/AuthContext'
 
 import Home from './pages/Home'
 import Search from './pages/Search'
@@ -7,8 +10,22 @@ import Settings from './pages/Settings'
 import Login from './pages/Login'
 
 function App() {
+  const { user } = useAuth()
+
+  useEffect(() => {
+    const isDarkTheme = user?.theme === 'dark'
+
+    document.documentElement.classList.toggle('dark', isDarkTheme)
+  }, [user?.theme])
+
   return (
-    <main>
+    <main
+      className="
+                min-h-screen
+                bg-(--color-background)
+                text-(--color-text-primary)
+            "
+    >
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
